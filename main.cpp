@@ -1,5 +1,6 @@
 #include <cstring>
 #include <iostream>
+#include <algorithm>
 #include "Graph.hpp"
 
 /**
@@ -17,9 +18,45 @@ Graph readFromFile() {
  * @param g The input graph.
  * @return Sub-graph of g representing the MST.
  */
-Graph kruskal(const Graph g) {
-    Graph mst;
-    //TODO: Implement Kruskal's algorithm
+Graph kruskal(const Graph& g) {
+    int V = g.getVertices();
+    Graph mst(V);  // Create MST graph with same number of vertices
+
+    // Get all edges from the graph
+    std::vector<Edge> edges = g.getAllEdges();
+
+    // Sort edges in non-decreasing order of weight
+    std::sort(edges.begin(), edges.end(), [](const Edge& a, const Edge& b) {
+        return a.weight < b.weight;
+    });
+
+    // Initialize DSU for cycle detection
+    DSU dsu(V);
+
+    int mstWeight = 0;
+    int edgeCount = 0;
+
+    // Iterate through sorted edges
+    for (const Edge& edge : edges) {
+        int u = edge.src;
+        int v = edge.dest;
+        int w = edge.weight;
+
+        // Check if adding this edge creates a cycle
+        if (dsu.find(u) != dsu.find(v)) {
+            // No cycle - add edge to MST
+            dsu.unionSets(u, v);
+            mst.addEdge(u, v, w);
+            mstWeight += w;
+            edgeCount++;
+
+            // MST is complete when we have V-1 edges
+            if (edgeCount == V - 1) {
+                break;
+            }
+        }
+    }
+
     return mst;
 }
 
@@ -28,7 +65,7 @@ Graph kruskal(const Graph g) {
  * @param g The input graph.
  * @return Sub-graph of g representing the MST.
  */
-Graph prim(const Graph g) {
+Graph prim(const Graph& g) {
     Graph mst;
     //TODO: Implement Prim's algorithm
     return mst;
