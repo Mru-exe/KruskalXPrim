@@ -13,7 +13,7 @@
  */
 class UnionFind {
 private:
-    std::unordered_map<int, int> parent;
+    std::unordered_map<long, long> parent;
 public:
     UnionFind() = default;
 
@@ -22,21 +22,27 @@ public:
      * @param x The element to find.
      * @return The representative of the set containing x.
      */
-    int find(int x);
+    long find(long x);
 
     /**
      * Unites the sets containing elements x and y.
      * @param x An element in the first set.
      * @param y An element in the second set.
      */
-    void unite(int x, int y);
+    void unite(long x, long y);
 
     /**
      * Adds a new element to the Union-Find structure.
      * The new element will be in its own set initially.
      * @param x The element to add.
      */
-    void addElement(int x);
+    void addElement(long x);
+
+    /**
+     * Returns the number of disjoint sets currently in the structure.
+     * @return the number of disjoint sets.
+     */
+    unsigned long getSetCount();
 };
 
 

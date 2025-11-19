@@ -1,6 +1,8 @@
 #include "UnionFind.hpp"
 
-int UnionFind::find(int x) {
+#include <set>
+
+long UnionFind::find(long x) {
     // If x is not in the parent map, add it as its own parent
     if (parent.find(x) == parent.end()) {
         parent[x] = x;
@@ -15,10 +17,10 @@ int UnionFind::find(int x) {
     return parent[x];
 }
 
-void UnionFind::unite(int x, int y) {
+void UnionFind::unite(long x, long y) {
     // Find representatives of both sets
-    int rootX = find(x);
-    int rootY = find(y);
+    long rootX = find(x);
+    long rootY = find(y);
 
     // If they're already in the same set, nothing to do
     if (rootX == rootY) {
@@ -29,9 +31,17 @@ void UnionFind::unite(int x, int y) {
     parent[rootX] = rootY;
 }
 
-void UnionFind::addElement(int x) {
+void UnionFind::addElement(long x) {
     // Only add if not already present
     if (parent.find(x) == parent.end()) {
         parent[x] = x;
     }
+}
+
+unsigned long UnionFind::getSetCount() {
+    std::set<long> uniqueRoots;
+    for (auto set : parent) {
+        uniqueRoots.insert(find(set.first));
+    }
+    return uniqueRoots.size();
 }
