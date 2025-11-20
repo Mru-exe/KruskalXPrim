@@ -12,6 +12,8 @@ public:
     struct Edge {
         long a, b;
         long weight;
+
+        bool operator==(Edge other);
     };
 private:
     std::set<long> vertices;
