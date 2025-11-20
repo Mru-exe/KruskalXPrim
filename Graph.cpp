@@ -18,9 +18,9 @@ Graph Graph::getRandomGraph(unsigned int maxId, unsigned long maxWeight) {
     srand(std::chrono::system_clock::now().time_since_epoch().count());
     long A,B,W;
     do {
-        A = rand() % 100;
-        B = rand() % 100;
-        W = rand() % 50;
+        A = rand() % maxId;
+        B = rand() % maxId;
+        W = rand() % maxWeight;
         g.addEdge(A, B, (W+1));
         uf.unite(A, B);
     } while (uf.getSetCount() != 1 || g.getEdgeList().size() < 5);
