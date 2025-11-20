@@ -38,30 +38,142 @@ Graph readFromFile(const std::string& filename) {
     return g;
 }
 
-int main(int argc, char** argv) {
-    if (argc == 2) {
-        if (strcmp(argv[1], "--help")==0) {
-            std::cout << std::endl;
-            std::cout << "# ABOUT:" << std::endl;
-            std::cout << "# \t This program will compute the Minimum Spanning Tree (MST) using both Kruskal's and Prim's algorithms." << std::endl;
-            std::cout << "# \t The input graph is expected to be undirected and with weighted edges." << std::endl;
-            std::cout << "# \t The edge weight 0 is allowed and considered a valid edge" << std::endl;
+enum RunOption {
+    HELP,
+    GENERATE,
+    KRUSKAL_ONLY,
+    PRIM_ONLY,
+    BOTH,
+    FAIL
+};
 
-            std::cout << "# HOW TO USE:" << std::endl;
-            std::cout << "# \t Usage: " << argv[0] << " <input_file>" << std::endl;
-            std::cout << "# \t - To calculate MSTs from graph provided in <input_file>" << std::endl;
-            std::cout << "#" << std::endl;
-            std::cout << "# \t Or use " << argv[0] << " --help" << std::endl;
-            std::cout << "# \t - to display this message." << std::endl;
-        } else {
-            //TODO: Read graph from file and run both algorithms.
-            //TODO: Print the resulting MSTs and their total weights.
-        }
-    } else {
-        std::cerr << "Invalid argument(s)." << std::endl;
-        std::cerr << "Usage: " << argv[0] << " <input_file>" << std::endl;
-        std::cerr << "Use --help to display a manual" << std::endl;
-        return 1;
+struct RunArgs {
+    bool useFormatting = false;
+    std::string filename;
+    int generatorAmplifier = 20;
+};
+
+/**
+ * Parses command line arguments and returns a pair of RunOption and RunArgs.
+ * @param argc Argument count.
+ * @param argv Argument vector.
+ * @return A pair of RunOption and RunArgs.
+ */
+std::pair<RunOption, RunArgs> parseArguments(const int& argc, char* argv[]) {
+    std::set<std::string> flagSet;
+    for (int i = 1; i < argc; ++i) {
+        flagSet.insert(argv[i]);
     }
-    return 0;
+
+    RunOption opt = BOTH;
+    RunArgs flg = {};
+    auto out = std::make_pair(opt, flg);
+
+    out.second.useFormatting = (flagSet.contains("-f") || flagSet.contains("--formatted"));
+
+    if (argc < 2) {
+        out.first = FAIL;
+        return out;
+    }
+
+    if (flagSet.contains("--help")) {
+        out.first = HELP;
+        return out;
+    }
+
+    if (flagSet.contains("-g") || flagSet.contains("--generate")) {
+        out.first = GENERATE;
+        int amp = std::atoi(argv[argc-1]);
+        out.second.generatorAmplifier = (amp > 5) ? amp : 5;
+        return out;
+    }
+
+    if (flagSet.contains("-k") || flagSet.contains("--kruskal")) {
+        out.first = KRUSKAL_ONLY;
+    }
+    if (flagSet.contains("-p") || flagSet.contains("--prim")) {
+        if (out.first == KRUSKAL_ONLY) {
+            out.first = BOTH;
+        } else {
+            out.first = PRIM_ONLY;
+        }
+    }
+    if (argv[argc-1][0] != '-') {
+        out.second.filename = argv[argc-1];
+    } else {
+        out.first = FAIL;
+    }
+    return out;
+}
+
+int main(int argc, char* argv[]) {
+    auto args = parseArguments(argc, argv);
+    RunOption runOption = args.first;
+
+    switch (runOption) {
+        case(HELP): {
+            //PRINT HELP
+            return 0;
+        }
+        case(GENERATE): {
+            Graph random = Graph::getRandomGraph(args.second.generatorAmplifier, args.second.generatorAmplifier/2);
+            random.print(std::cout, !args.second.useFormatting);
+            return 0;
+        }
+        case(BOTH): {
+            Graph input;
+            try {
+                input = readFromFile(args.second.filename);
+            }
+            catch (std::invalid_argument e) {
+                std::cerr << "* " << e.what() << std::endl;
+                return 1;
+            }
+            Graph kruskalMST = MST::kruskal(input);
+            Graph primMST = MST::prim(input);
+
+            std::cout << "* Kruskals' MST:" << std::endl;
+            kruskalMST.print(std::cout, args.second.useFormatting);
+            std::cout << std::endl;
+            std::cout << "* Prims' MST:" << std::endl;
+            primMST.print(std::cout, args.second.useFormatting);
+            return 0;
+        }
+        case(PRIM_ONLY): {
+            Graph input;
+            try {
+                input = readFromFile(args.second.filename);
+            }
+            catch (std::invalid_argument e) {
+                std::cerr << "* " << e.what() << std::endl;
+                return 1;
+            }
+            Graph primMST = MST::prim(input);
+
+            std::cout << "* Prims' MST:" << std::endl;
+            primMST.print(std::cout, args.second.useFormatting);
+            return 0;
+        }
+        case(KRUSKAL_ONLY): {
+            Graph input;
+            try {
+                input = readFromFile(args.second.filename);
+            }
+            catch (std::invalid_argument e) {
+                std::cerr << "* " << e.what() << std::endl;
+                return 1;
+            }
+            Graph kruskalMST = MST::kruskal(input);
+
+            std::cout << "* Kruskals' MST:" << std::endl;
+            kruskalMST.print(std::cout, args.second.useFormatting);
+            return 0;
+        }
+    default:
+        case(FAIL): {
+            std::cerr << "* Invalid arguments." << std::endl;
+            std::cerr << "* Try running: ./kxp --help, to display help." << std::endl;
+            return 1;
+        }
+    }
 }
