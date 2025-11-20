@@ -1,6 +1,7 @@
 #include <cstring>
 #include <iostream>
 #include "Graph.hpp"
+#include "MST.hpp"
 
 /**
  * Reads a graph from a file. The file is expected to contain the adjacency list of the Graph.
@@ -10,28 +11,6 @@ Graph readFromFile() {
     Graph g;
     //TODO: Implement file reading logic
     return g;
-}
-
-/**
- * Performs Kruskal's algorithm to find the Minimum Spanning Tree (MST) of a given graph.
- * @param g The input graph.
- * @return Sub-graph of g representing the MST.
- */
-Graph kruskal(const Graph g) {
-    Graph mst;
-    //TODO: Implement Kruskal's algorithm
-    return mst;
-}
-
-/**
- * Performs Prim's algorithm to find the Minimum Spanning Tree (MST) of a given graph.
- * @param g The input graph.
- * @return Sub-graph of g representing the MST.
- */
-Graph prim(const Graph g) {
-    Graph mst;
-    //TODO: Implement Prim's algorithm
-    return mst;
 }
 
 int main(int argc, char** argv) {
