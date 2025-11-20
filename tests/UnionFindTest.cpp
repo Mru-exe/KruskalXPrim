@@ -5,10 +5,10 @@ TEST_CASE("UnionFind - basic operations") {
     UnionFind uf;
 
     SECTION("Add 10 elements") {
-        REQUIRE_NOTHROW([=](UnionFind uf)
+        REQUIRE_NOTHROW([](UnionFind& ufp)
         {
             for (int i = 0; i < 10; ++i) {
-                uf.addElement(i);
+                ufp.addElement(i);
             }
         });
     }
