@@ -1,10 +1,6 @@
 #include "Graph.hpp"
-
-#include <chrono>
-
-#include "UnionFind.hpp"
-#include <iomanip>
 #include <ostream>
+#include <random>
 
 
 unsigned int Graph::getVertexCount() const {
@@ -13,17 +9,37 @@ unsigned int Graph::getVertexCount() const {
 
 Graph Graph::getRandomGraph(unsigned int maxId, unsigned long maxWeight) {
     Graph g;
-    UnionFind uf;
+    if (maxId == 0) return g;
 
-    srand(std::chrono::system_clock::now().time_since_epoch().count());
-    long A,B,W;
-    do {
-        A = rand() % maxId;
-        B = rand() % maxId;
-        W = rand() % maxWeight;
-        g.addEdge(A, B, (W+1));
-        uf.unite(A, B);
-    } while (uf.getSetCount() != 1 || g.getEdgeList().size() < 5);
+    static std::mt19937 rng(std::random_device{}());
+    std::uniform_int_distribution<unsigned long> weightDist(0, maxWeight > 0 ? maxWeight - 1 : 0);
+
+    std::vector<unsigned int> nodes(maxId);
+    for (unsigned int i = 0; i < maxId; ++i) {
+        nodes[i] = i;
+    }
+
+    std::shuffle(nodes.begin(), nodes.end(), rng);
+
+    for (unsigned int i = 1; i < maxId; ++i) {
+        std::uniform_int_distribution<unsigned int> targetDist(0, i - 1);
+        unsigned int target = nodes[targetDist(rng)];
+
+        g.addEdge(nodes[i], target, weightDist(rng) + 1);
+    }
+
+    unsigned long currentEdgeCount = (maxId > 0) ? maxId - 1 : 0;
+    std::uniform_int_distribution<unsigned int> nodeDist(0, maxId - 1);
+
+    while (currentEdgeCount < 5) {
+        unsigned int A = nodeDist(rng);
+        unsigned int B = nodeDist(rng);
+
+        if (A == B && maxId > 1) continue;
+
+        g.addEdge(A, B, weightDist(rng) + 1);
+        currentEdgeCount++;
+    }
 
     return g;
 }
