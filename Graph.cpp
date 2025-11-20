@@ -1,11 +1,31 @@
 #include "Graph.hpp"
 
+#include <chrono>
+
+#include "UnionFind.hpp"
 #include <iomanip>
 #include <ostream>
 
 
 unsigned int Graph::getVertexCount() const {
     return this->vertices.size();
+}
+
+Graph Graph::getRandomGraph(unsigned int maxId, unsigned long maxWeight) {
+    Graph g;
+    UnionFind uf;
+
+    srand(std::chrono::system_clock::now().time_since_epoch().count());
+    long A,B,W;
+    do {
+        A = rand() % 100;
+        B = rand() % 100;
+        W = rand() % 50;
+        g.addEdge(A, B, (W+1));
+        uf.unite(A, B);
+    } while (uf.getSetCount() != 1 || g.getEdgeList().size() < 5);
+
+    return g;
 }
 
 void Graph::addEdge(long A, long B, long W) {

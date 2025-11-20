@@ -20,6 +20,14 @@ public:
     Graph() = default;
 
     /**
+     * Generates a random connected graph (with minimum 5 edges).
+     * @param maxId the maximum vertex ID (vertex IDs will be in the range [0, maxId-1]).
+     * @param maxWeight the maximum edge weight (edge weights will be in the range [0, maxWeight-1]).
+     * @return Generated random graph.
+     */
+    static Graph getRandomGraph(unsigned int maxId, unsigned long maxWeight);
+
+    /**
      * Returns the number of vertices in the graph.
      * @return Number of vertices.
      */
