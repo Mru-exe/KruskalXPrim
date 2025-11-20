@@ -1,15 +1,41 @@
 #include <cstring>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include "Graph.hpp"
+#include "UnionFind.hpp"
 #include "MST.hpp"
 
 /**
  * Reads a graph from a file. The file is expected to contain the adjacency list of the Graph.
  * @return The graph read from the file.
  */
-Graph readFromFile() {
+Graph readFromFile(std::string filename) {
     Graph g;
-    //TODO: Implement file reading logic
+    UnionFind uf;
+
+    std::ifstream file(filename);
+
+    if (!file.is_open()) {
+        throw std::invalid_argument("Could not open file " + filename);
+    }
+
+    std::string line;
+    while (std::getline(file, line)) {
+        std::istringstream iss(line);
+        long v1, v2, w;
+        if (iss >> v1 >> v2 >> w) {
+            g.addEdge(v1, v2, w);
+            uf.unite(v1, v2);
+        } else {
+            std::cerr << "Invalid character sequence on line: " << line << std::endl;
+        }
+    }
+    file.close();
+
+    if (uf.getSetCount() != 1) {
+        throw std::invalid_argument("The provided graph is not connected.");
+    }
     return g;
 }
 
