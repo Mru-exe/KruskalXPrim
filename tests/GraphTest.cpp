@@ -4,6 +4,14 @@
 #include "../Graph.hpp"
 #include "../UnionFind.hpp"
 
+bool isConnected(Graph& g) {
+    UnionFind uf;
+    for (auto edge : g.getEdgeList()) {
+        uf.unite(edge.a, edge.b);
+    }
+    unsigned long comps = uf.getSetCount();
+    return (comps == 1);
+}
 
 TEST_CASE("Graph - Basic behaviour") {
     Graph g;
@@ -69,18 +77,9 @@ TEST_CASE("Graph - Advanced generation") {
     SECTION("20 random graphs - Modulo 400") {
         for (int i = 0; i < 20; ++i) {
             Graph g;
-            UnionFind uf;
-            long A,B,W;
-            do {
-                A = rand() % 400;
-                B = rand() % 400;
-                W = rand() % 50;
-                g.addEdge(A, B, W);
-                uf.unite(A, B);
-            } while (uf.getSetCount() != 1 || g.getEdgeList().size() < 5);
+            g = Graph::getRandomGraph(400, 100);
 
-            //Must not be greater than 1
-            REQUIRE_FALSE(uf.getSetCount() > 1);
+            REQUIRE(isConnected(g));
             REQUIRE(g.getEdgeList().size() >= 5);
         }
     }
@@ -88,18 +87,9 @@ TEST_CASE("Graph - Advanced generation") {
     SECTION("5000 random graphs - Modulo 50") {
         for (int i = 0; i < 5000; ++i) {
             Graph g;
-            UnionFind uf;
-            long A,B,W;
-            do {
-                A = rand() % 50;
-                B = rand() % 50;
-                W = rand() % 50;
-                g.addEdge(A, B, W);
-                uf.unite(A, B);
-            } while (uf.getSetCount() != 1 || g.getEdgeList().size() < 5);
+            g = Graph::getRandomGraph(50, 20);
 
-            //Must not be greater than 1
-            REQUIRE_FALSE(uf.getSetCount() > 1);
+            REQUIRE(isConnected(g));
             REQUIRE(g.getEdgeList().size() >= 5);
         }
     }
