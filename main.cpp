@@ -10,7 +10,7 @@
  * Reads a graph from a file. The file is expected to contain the adjacency list of the Graph.
  * @return The graph read from the file.
  */
-Graph readFromFile(std::string filename) {
+Graph readFromFile(const std::string& filename) {
     Graph g;
     UnionFind uf;
 
@@ -23,8 +23,7 @@ Graph readFromFile(std::string filename) {
     std::string line;
     while (std::getline(file, line)) {
         std::istringstream iss(line);
-        long v1, v2, w;
-        if (iss >> v1 >> v2 >> w) {
+        if (long v1, v2, w; iss >> v1 >> v2 >> w) {
             g.addEdge(v1, v2, w);
             uf.unite(v1, v2);
         } else {
