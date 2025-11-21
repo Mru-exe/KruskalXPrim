@@ -112,7 +112,7 @@ int main(int argc, char* argv[]) {
 
     switch (runOption) {
         case(HELP): {
-            //PRINT HELP
+            std::cout << "* Kruskal's and Prim's MST Algorithm comparison" << std::endl;
             return 0;
         }
         case(GENERATE): {
@@ -125,7 +125,7 @@ int main(int argc, char* argv[]) {
             try {
                 input = readFromFile(args.second.filename);
             }
-            catch (std::invalid_argument e) {
+            catch (std::invalid_argument& e) {
                 std::cerr << "* " << e.what() << std::endl;
                 return 1;
             }
@@ -144,7 +144,7 @@ int main(int argc, char* argv[]) {
             try {
                 input = readFromFile(args.second.filename);
             }
-            catch (std::invalid_argument e) {
+            catch (std::invalid_argument& e) {
                 std::cerr << "* " << e.what() << std::endl;
                 return 1;
             }
@@ -159,7 +159,7 @@ int main(int argc, char* argv[]) {
             try {
                 input = readFromFile(args.second.filename);
             }
-            catch (std::invalid_argument e) {
+            catch (std::invalid_argument& e) {
                 std::cerr << "* " << e.what() << std::endl;
                 return 1;
             }
