@@ -55,6 +55,7 @@ enum RunOption {
 
 struct RunArgs {
     bool useFormatting = false;
+    bool dontPrint = false;
     std::string filename;
     int generatorAmplifier = 20;
 };
@@ -76,6 +77,7 @@ std::pair<RunOption, RunArgs> parseArguments(const int& argc, char* argv[]) {
     auto out = std::make_pair(opt, flg);
 
     out.second.useFormatting = (flagSet.contains("-f") || flagSet.contains("--formatted"));
+    out.second.dontPrint = (flagSet.contains("-s") || flagSet.contains("--silent"));
 
     if (argc < 2) {
         out.first = FAIL;
@@ -127,6 +129,7 @@ int main(int argc, char* argv[]) {
             std::cout << "*  -k, --kruskal               Compute only Kruskal's MST from the input file." << std::endl;
             std::cout << "*  -p, --prim                  Compute only Prim's MST from the input file." << std::endl;
             std::cout << "*  -f, --formatted             Use formatted output for the graphs." << std::endl;
+            std::cout << "*  -s, --silent                Do not print the resulting MSTs, only display computation time." << std::endl;
             std::cout << "*  [no arguments]              Compute both Kruskal's and Prim's MST from the input file." << std::endl;
             std::cout << "*  <filename>                  The input file containing the graph's edge list." << std::endl << std::endl;
 
@@ -157,11 +160,11 @@ int main(int argc, char* argv[]) {
             auto endP = std::chrono::high_resolution_clock::now();
 
 
-            std::cout << "* Kruskals' MST (" << to_ms(endK - startK).count() << "ms):" << std::endl;
-            kruskalMST.print(std::cout, !args.second.useFormatting);
+            std::cout << "** Kruskals' MST (" << to_ms(endK - startK).count() << "ms) **" << std::endl;
+            if (!args.second.dontPrint) kruskalMST.print(std::cout, !args.second.useFormatting);
             std::cout << std::endl;
-            std::cout << "* Prims' MST (" << to_ms(endP - startP).count() << "ms):" << std::endl;
-            primMST.print(std::cout, !args.second.useFormatting);
+            std::cout << "** Prims' MST (" << to_ms(endP - startP).count() << "ms) **" << std::endl;
+            if (!args.second.dontPrint) primMST.print(std::cout, !args.second.useFormatting);
             return 0;
         }
         case(PRIM_ONLY): {
@@ -177,8 +180,8 @@ int main(int argc, char* argv[]) {
             Graph primMST = MST::prim(input);
             auto endP = std::chrono::high_resolution_clock::now();
 
-            std::cout << "* Prims' MST (" << to_ms(endP - startP).count() << "ms):" << std::endl;
-            primMST.print(std::cout, !args.second.useFormatting);
+            std::cout << "** Prims' MST (" << to_ms(endP - startP).count() << "ms) **" << std::endl;
+            if (!args.second.dontPrint) primMST.print(std::cout, !args.second.useFormatting);
             return 0;
         }
         case(KRUSKAL_ONLY): {
@@ -194,8 +197,8 @@ int main(int argc, char* argv[]) {
             Graph kruskalMST = MST::kruskal(input);
             auto endK = std::chrono::high_resolution_clock::now();
 
-            std::cout << "* Kruskals' MST (" << to_ms(endK - startK).count() << "ms):" << std::endl;
-            kruskalMST.print(std::cout, !args.second.useFormatting);
+            std::cout << "** Kruskals' MST (" << to_ms(endK - startK).count() << "ms) **" << std::endl;
+            if (!args.second.dontPrint) kruskalMST.print(std::cout, !args.second.useFormatting);
             return 0;
         }
     default:
