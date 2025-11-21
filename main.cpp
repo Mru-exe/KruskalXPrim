@@ -133,10 +133,10 @@ int main(int argc, char* argv[]) {
             Graph primMST = MST::prim(input);
 
             std::cout << "* Kruskals' MST:" << std::endl;
-            kruskalMST.print(std::cout, args.second.useFormatting);
+            kruskalMST.print(std::cout, !args.second.useFormatting);
             std::cout << std::endl;
             std::cout << "* Prims' MST:" << std::endl;
-            primMST.print(std::cout, args.second.useFormatting);
+            primMST.print(std::cout, !args.second.useFormatting);
             return 0;
         }
         case(PRIM_ONLY): {
@@ -151,7 +151,7 @@ int main(int argc, char* argv[]) {
             Graph primMST = MST::prim(input);
 
             std::cout << "* Prims' MST:" << std::endl;
-            primMST.print(std::cout, args.second.useFormatting);
+            primMST.print(std::cout, !args.second.useFormatting);
             return 0;
         }
         case(KRUSKAL_ONLY): {
@@ -166,7 +166,7 @@ int main(int argc, char* argv[]) {
             Graph kruskalMST = MST::kruskal(input);
 
             std::cout << "* Kruskals' MST:" << std::endl;
-            kruskalMST.print(std::cout, args.second.useFormatting);
+            kruskalMST.print(std::cout, !args.second.useFormatting);
             return 0;
         }
     default:
