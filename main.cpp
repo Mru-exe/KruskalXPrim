@@ -2,9 +2,15 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <chrono>
 #include "Graph.hpp"
 #include "UnionFind.hpp"
 #include "MST.hpp"
+
+template <typename TimePoint>
+std::chrono::milliseconds to_ms(TimePoint tp) {
+    return std::chrono::duration_cast<std::chrono::milliseconds>(tp);
+}
 
 /**
  * Reads a graph from a file. The file is expected to contain the adjacency list of the Graph.
@@ -84,7 +90,7 @@ std::pair<RunOption, RunArgs> parseArguments(const int& argc, char* argv[]) {
     if (flagSet.contains("-g") || flagSet.contains("--generate")) {
         out.first = GENERATE;
         int amp = std::atoi(argv[argc-1]);
-        out.second.generatorAmplifier = (amp > 5) ? amp : 5;
+        out.second.generatorAmplifier = (amp > 5) ? amp : out.second.generatorAmplifier;
         return out;
     }
 
@@ -143,13 +149,18 @@ int main(int argc, char* argv[]) {
                 std::cerr << "* " << e.what() << std::endl;
                 return 1;
             }
+            auto startK = std::chrono::high_resolution_clock::now();
             Graph kruskalMST = MST::kruskal(input);
+            auto endK = std::chrono::high_resolution_clock::now();
+            auto startP = std::chrono::high_resolution_clock::now();
             Graph primMST = MST::prim(input);
+            auto endP = std::chrono::high_resolution_clock::now();
 
-            std::cout << "* Kruskals' MST:" << std::endl;
+
+            std::cout << "* Kruskals' MST (" << to_ms(endK - startK).count() << "ms):" << std::endl;
             kruskalMST.print(std::cout, !args.second.useFormatting);
             std::cout << std::endl;
-            std::cout << "* Prims' MST:" << std::endl;
+            std::cout << "* Prims' MST (" << to_ms(endP - startP).count() << "ms):" << std::endl;
             primMST.print(std::cout, !args.second.useFormatting);
             return 0;
         }
@@ -162,9 +173,11 @@ int main(int argc, char* argv[]) {
                 std::cerr << "* " << e.what() << std::endl;
                 return 1;
             }
+            auto startP = std::chrono::high_resolution_clock::now();
             Graph primMST = MST::prim(input);
+            auto endP = std::chrono::high_resolution_clock::now();
 
-            std::cout << "* Prims' MST:" << std::endl;
+            std::cout << "* Prims' MST (" << to_ms(endP - startP).count() << "ms):" << std::endl;
             primMST.print(std::cout, !args.second.useFormatting);
             return 0;
         }
@@ -177,9 +190,11 @@ int main(int argc, char* argv[]) {
                 std::cerr << "* " << e.what() << std::endl;
                 return 1;
             }
+            auto startK = std::chrono::high_resolution_clock::now();
             Graph kruskalMST = MST::kruskal(input);
+            auto endK = std::chrono::high_resolution_clock::now();
 
-            std::cout << "* Kruskals' MST:" << std::endl;
+            std::cout << "* Kruskals' MST (" << to_ms(endK - startK).count() << "ms):" << std::endl;
             kruskalMST.print(std::cout, !args.second.useFormatting);
             return 0;
         }
