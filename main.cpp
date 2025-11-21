@@ -112,7 +112,21 @@ int main(int argc, char* argv[]) {
 
     switch (runOption) {
         case(HELP): {
-            std::cout << "* Kruskal's and Prim's MST Algorithm comparison" << std::endl;
+            std::cout << "# Kruskal's and Prim's MST Algorithm comparison" << std::endl;
+            std::cout << "* Usage: ./kxp [options] <filename>" << std::endl << std::endl;
+
+            std::cout << "# OPTIONS:" << std::endl;
+            std::cout << "*  --help                      Display this help message." << std::endl;
+            std::cout << "*  -g, --generate [amplifier]  Generate a random, connected graph. Amplifier is optional, default is 20 and values less than 5 are ignored." << std::endl;
+            std::cout << "*  -k, --kruskal               Compute only Kruskal's MST from the input file." << std::endl;
+            std::cout << "*  -p, --prim                  Compute only Prim's MST from the input file." << std::endl;
+            std::cout << "*  -f, --formatted             Use formatted output for the graphs." << std::endl;
+            std::cout << "*  [no arguments]              Compute both Kruskal's and Prim's MST from the input file." << std::endl;
+            std::cout << "*  <filename>                  The input file containing the graph's edge list." << std::endl << std::endl;
+
+            std::cout << "# FILE FORMAT:" << std::endl;
+            std::cout << "*  The input file should contain the edge list of a CONNECTED graph." << std::endl;
+            std::cout << "*  Each line representing an edge in the format: <vertex1> <vertex2> <weight>" << std::endl;
             return 0;
         }
         case(GENERATE): {
