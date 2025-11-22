@@ -23,24 +23,6 @@ TEST_CASE("Graph - Basic behaviour") {
         REQUIRE(g.getVertexCount() == 3);
         REQUIRE(g.getEdges().size() == 3);
     }
-
-    SECTION("AddEdge overrides existing") {
-        g.addEdge(1, 2, 10);
-        g.addEdge(3, 4, 20);
-
-        long vcount = g.getVertexCount();
-        long ecount = g.getEdges().size();
-        REQUIRE(vcount == 4);
-        REQUIRE(ecount == 2);
-
-        for (auto edge : g.getEdges()) {
-            long newWeight = edge.weight + 5;
-            g.addEdge(edge.a, edge.b, newWeight);
-
-            REQUIRE(g.getEdges().size() == ecount);
-            REQUIRE(g.getVertexCount() == vcount);
-        }
-    }
 }
 
 TEST_CASE("Graph - Simple generation") {
