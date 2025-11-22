@@ -92,7 +92,7 @@ std::pair<RunOption, RunArgs> parseArguments(const int& argc, char* argv[]) {
     if (flagSet.contains("-g") || flagSet.contains("--generate")) {
         out.first = GENERATE;
         int amp = std::atoi(argv[argc-1]);
-        out.second.generatorAmplifier = (amp > 5) ? amp : out.second.generatorAmplifier;
+        out.second.generatorAmplifier = (amp > 0) ? amp : out.second.generatorAmplifier;
         return out;
     }
 
@@ -125,7 +125,7 @@ int main(int argc, char* argv[]) {
 
             std::cout << "# OPTIONS:" << std::endl;
             std::cout << "*  --help                      Display this help message." << std::endl;
-            std::cout << "*  -g, --generate [amplifier]  Generate a random, connected graph. Amplifier is optional, default is 20 and values less than 5 are ignored." << std::endl;
+            std::cout << "*  -g, --generate [edges]      Generate a random, connected graph. Edge is optional, default is 20." << std::endl;
             std::cout << "*  -k, --kruskal               Compute only Kruskal's MST from the input file." << std::endl;
             std::cout << "*  -p, --prim                  Compute only Prim's MST from the input file." << std::endl;
             std::cout << "*  -f, --formatted             Use formatted output for the graphs." << std::endl;
@@ -139,7 +139,7 @@ int main(int argc, char* argv[]) {
             return 0;
         }
         case(GENERATE): {
-            Graph random = Graph::getRandomGraph(args.second.generatorAmplifier, args.second.generatorAmplifier/2);
+            Graph random = Graph::getRandomGraph(args.second.generatorAmplifier, args.second.generatorAmplifier);
             random.print(std::cout, !args.second.useFormatting);
             return 0;
         }
