@@ -13,14 +13,14 @@ std::chrono::milliseconds to_ms(TimePoint tp) {
 }
 
 /**
- * Reads a graph from a file. The file is expected to contain the adjacency list of the Graph.
+ * Reads a graph from a file. The file is expected to contain the edge list of the Graph.
  * @return The graph read from the file.
  */
 Graph readFromFile(const std::string& filename) {
     Graph g;
     UnionFind uf;
 
-    std::ifstream file(filename);
+    std::ifstream file(filename, std::ios::binary);
 
     if (!file.is_open()) {
         throw std::invalid_argument("Could not open file " + filename);
