@@ -13,10 +13,12 @@ public:
         long weight;
 
         bool operator==(Edge other) const;
+
+        bool operator<(const Edge& other) const;
     };
 private:
     std::set<long> vertices;
-    std::set<Edge> edgeList;
+    std::set<Edge> edges;
 public:
     Graph() = default;
 
@@ -26,7 +28,7 @@ public:
      * @param maxWeight the maximum edge weight (edge weights will be in the range [0, maxWeight-1]).
      * @return Generated random graph.
      */
-    static Graph getRandomGraph(unsigned int maxId, unsigned long maxWeight);
+    static Graph getRandomGraph(unsigned int edges, unsigned long maxWeight);
 
     /**
      * Returns the number of vertices in the graph.

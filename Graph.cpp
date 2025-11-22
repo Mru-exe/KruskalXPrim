@@ -69,18 +69,18 @@ void Graph::addEdge(long A, long B, long W) {
 }
 
 const std::set<Graph::Edge>& Graph::getEdges() const {
-    return this->edgeList;
+    return this->edges;
 }
 
 void Graph::print(std::ostream& os, bool minimal) const {
     if (minimal) {
-        for (auto edge : this->edgeList) {
+        for (auto edge : this->edges) {
             os << edge.a << " " << edge.b << " " << edge.weight << std::endl;
         }
     } else {
         os << "U -- V [weight]" << std::endl;
         os << "- - - - - - - -" << std::endl;
-        for (auto edge : this->edgeList) {
+        for (auto edge : this->edges) {
             os << edge.a << " -- " << edge.b << " [" << edge.weight << "]" << std::endl;
         }
     }
@@ -88,4 +88,10 @@ void Graph::print(std::ostream& os, bool minimal) const {
 
 bool Graph::Edge::operator==(Edge other) const {
     return (a == other.a) && (b == other.b);
+}
+
+bool Graph::Edge::operator<(const Edge& other) const {
+    if (weight != other.weight) return weight < other.weight;
+    if (a != other.a) return a < other.a;
+    return b < other.b;
 }
