@@ -12,7 +12,7 @@ public:
         long a, b;
         long weight;
 
-        bool operator==(Edge other);
+        bool operator==(Edge other) const;
     };
 private:
     std::set<long> vertices;

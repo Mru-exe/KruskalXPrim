@@ -86,6 +86,6 @@ void Graph::print(std::ostream& os, bool minimal) const {
     }
 }
 
-bool Graph::Edge::operator==(Edge other) {
+bool Graph::Edge::operator==(Edge other) const {
     return (a == other.a) && (b == other.b);
 }
