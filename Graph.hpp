@@ -55,7 +55,7 @@ public:
      * @param A One veretx of the edge.
      * @param B The other vertex of the edge.
      * @param W The weight of the edge.
-     * If the edge already exists, its weight is updated.
+     * If the edge already exists, nothing happens
      */
     void addEdge(long A, long B, long W);
 
