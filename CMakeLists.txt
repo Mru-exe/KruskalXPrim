@@ -1,7 +1,9 @@
-cmake_minimum_required(VERSION 4.0)
+cmake_minimum_required(VERSION 3.20)
 project(KruskalXPrim)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(core-files
         Graph.cpp
@@ -17,27 +19,30 @@ add_executable(kxp
         ${core-files}
 )
 
-add_executable(UnionFindTest
-        tests/catch.hpp
-        tests/catch.cpp
-        tests/UnionFindTest.cpp
-        ${core-files}
-)
+# Only build tests in Debug mode
+if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR NOT CMAKE_BUILD_TYPE)
+    add_executable(UnionFindTest
+            tests/catch.hpp
+            tests/catch.cpp
+            tests/UnionFindTest.cpp
+            ${core-files}
+    )
 
-add_executable(GraphTest
-        tests/catch.hpp
-        tests/catch.cpp
-        tests/GraphTest.cpp
-        ${core-files}
-)
-add_executable(MSTTest
-        tests/catch.hpp
-        tests/catch.cpp
-        tests/MSTTest.cpp
-        ${core-files}
-)
+    add_executable(GraphTest
+            tests/catch.hpp
+            tests/catch.cpp
+            tests/GraphTest.cpp
+            ${core-files}
+    )
+    add_executable(MSTTest
+            tests/catch.hpp
+            tests/catch.cpp
+            tests/MSTTest.cpp
+            ${core-files}
+    )
 
-enable_testing()
-add_test(NAME MSTTest COMMAND MSTTest)
-add_test(NAME UnionFindTest COMMAND UnionFindTest)
-add_test(NAME GraphTest COMMAND GraphTest)
+    enable_testing()
+    add_test(NAME MSTTest COMMAND MSTTest)
+    add_test(NAME UnionFindTest COMMAND UnionFindTest)
+    add_test(NAME GraphTest COMMAND GraphTest)
+endif()
