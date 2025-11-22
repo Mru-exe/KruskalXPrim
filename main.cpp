@@ -20,7 +20,7 @@ Graph readFromFile(const std::string& filename) {
     Graph g;
     UnionFind uf;
 
-    std::ifstream file(filename);
+    std::ifstream file(filename, std::ios::binary);
 
     if (!file.is_open()) {
         throw std::invalid_argument("Could not open file " + filename);
