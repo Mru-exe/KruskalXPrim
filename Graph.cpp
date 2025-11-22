@@ -1,71 +1,58 @@
 #include "Graph.hpp"
 #include <ostream>
 #include <random>
-
+#include <algorithm> // for std::shuffle (windows fix)
+#include <iostream>
 
 unsigned int Graph::getVertexCount() const {
     return this->vertices.size();
 }
 
-Graph Graph::getRandomGraph(unsigned int maxId, unsigned long maxWeight) {
+Graph Graph::getRandomGraph(unsigned int edges, unsigned long maxWeight) {
     Graph g;
-    if (maxId == 0) return g;
+    if (edges == 0) return g;
 
-    static std::mt19937 rng(std::random_device{}());
-    std::uniform_int_distribution<unsigned long> weightDist(0, maxWeight > 0 ? maxWeight - 1 : 0);
+    unsigned int minimumVertices = static_cast<unsigned int>(
+        std::ceil((1 + std::sqrt(1 + 8.0 * edges)) / 2.0)
+    );
+    unsigned int maximumVertices = edges + 1;
 
-    std::vector<unsigned int> nodes(maxId);
-    for (unsigned int i = 0; i < maxId; ++i) {
-        nodes[i] = i;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    std::uniform_int_distribution<unsigned int> viableVertexCountDist(minimumVertices, maximumVertices);
+    unsigned int vertices = viableVertexCountDist(gen);
+
+    std::uniform_int_distribution<long> weightDist(0, static_cast<long>(maxWeight - 1));
+    std::uniform_int_distribution<unsigned int> viableDist(0, vertices);
+
+    for (unsigned int i = 1; i < vertices; ++i) {
+        long weight = weightDist(gen);
+        unsigned int connectTo = viableDist(gen) % i;
+        g.addEdge(i, connectTo, weight);
     }
 
-    std::shuffle(nodes.begin(), nodes.end(), rng);
-
-    for (unsigned int i = 1; i < maxId; ++i) {
-        std::uniform_int_distribution<unsigned int> targetDist(0, i - 1);
-        unsigned int target = nodes[targetDist(rng)];
-
-        g.addEdge(nodes[i], target, weightDist(rng) + 1);
-    }
-
-    unsigned long currentEdgeCount = (maxId > 0) ? maxId - 1 : 0;
-    std::uniform_int_distribution<unsigned int> nodeDist(0, maxId - 1);
-
-    while (currentEdgeCount < 5) {
-        unsigned int A = nodeDist(rng);
-        unsigned int B = nodeDist(rng);
-
-        if (A == B && maxId > 1) continue;
-
-        g.addEdge(A, B, weightDist(rng) + 1);
-        currentEdgeCount++;
+    unsigned int currentEdges = g.getEdges().size();
+    while (currentEdges < edges) {
+        long weight = weightDist(gen);
+        unsigned int A = viableDist(gen);
+        unsigned int B = viableDist(gen);
+        if (A != B && !g.hasEdge(A, B)) {
+            g.addEdge(A, B, weight);
+            currentEdges = g.getEdges().size();
+        }
     }
 
     return g;
 }
 
 void Graph::addEdge(long A, long B, long W) {
-    // Add vertices to the set and check if they were new
-    auto [iterA, insertedA] = this->vertices.insert(A);
-    auto [iterB, insertedB] = this->vertices.insert(B);
-    
-    // If at least one vertex is new, the edge cannot exist yet
-    if (insertedA || insertedB) {
-        this->edgeList.push_back({A, B, W});
-        return;
+    this->vertices.insert(A);
+    this->vertices.insert(B);
+    if (this->hasEdge(A, B)) {
+        return; // Edge already exists, do nothing
     }
-    
-    // Both vertices existed, check if edge already exists (in either direction)
-    for (auto& edge : this->edgeList) {
-        if ((edge.a == A && edge.b == B) || (edge.a == B && edge.b == A)) {
-            // Update existing edge weight
-            edge.weight = W;
-            return;
-        }
-    }
-    
-    // Add new edge
-    this->edgeList.push_back({A, B, W});
+    this->edges.insert({A, B, W});
 }
 
 const std::set<Graph::Edge>& Graph::getEdges() const {
@@ -84,6 +71,11 @@ void Graph::print(std::ostream& os, bool minimal) const {
             os << edge.a << " -- " << edge.b << " [" << edge.weight << "]" << std::endl;
         }
     }
+}
+
+bool Graph::hasEdge(long A, long B) const {
+    return (this->edges.contains({A, B, 0})) ||
+           (this->edges.contains({B, A, 0}));
 }
 
 bool Graph::Edge::operator==(Edge other) const {
