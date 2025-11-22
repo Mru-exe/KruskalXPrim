@@ -55,6 +55,28 @@ TEST_CASE("Graph - Simple generation") {
     }
 }
 
+TEST_CASE("Graph - Generation matches edge count") {
+    SECTION("10 random graphs - Modulo 100") {
+        for (int i = 0; i < 10; ++i) {
+            Graph g;
+            int edgeCount = rand() % 100;
+            g = Graph::getRandomGraph(edgeCount, 50);
+
+            REQUIRE(g.getEdges().size() == edgeCount);
+        }
+    }
+
+    SECTION("100 random graphs - Modulo 20") {
+        for (int i = 0; i < 100; ++i) {
+            Graph g;
+            int edgeCount = rand() % 20;
+            g = Graph::getRandomGraph(edgeCount, 10);
+
+            REQUIRE(g.getEdges().size() == edgeCount);
+        }
+    }
+}
+
 TEST_CASE("Graph - Advanced generation") {
     SECTION("20 random graphs - Modulo 400") {
         for (int i = 0; i < 20; ++i) {
