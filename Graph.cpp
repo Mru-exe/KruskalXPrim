@@ -68,8 +68,8 @@ void Graph::addEdge(long A, long B, long W) {
     this->edgeList.push_back({A, B, W});
 }
 
-std::vector<Graph::Edge>& Graph::getEdgeList() const {
-    return const_cast<std::vector<Graph::Edge>&>(this->edgeList);
+const std::set<Graph::Edge>& Graph::getEdges() const {
+    return this->edgeList;
 }
 
 void Graph::print(std::ostream& os, bool minimal) const {

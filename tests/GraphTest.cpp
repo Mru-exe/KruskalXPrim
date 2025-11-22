@@ -6,7 +6,7 @@
 
 bool isConnected(Graph& g) {
     UnionFind uf;
-    for (auto edge : g.getEdgeList()) {
+    for (auto edge : g.getEdges()) {
         uf.unite(edge.a, edge.b);
     }
     unsigned long comps = uf.getSetCount();
@@ -21,7 +21,7 @@ TEST_CASE("Graph - Basic behaviour") {
         g.addEdge(3, 1, 30);
 
         REQUIRE(g.getVertexCount() == 3);
-        REQUIRE(g.getEdgeList().size() == 3);
+        REQUIRE(g.getEdges().size() == 3);
     }
 
     SECTION("AddEdge overrides existing") {
@@ -29,15 +29,15 @@ TEST_CASE("Graph - Basic behaviour") {
         g.addEdge(3, 4, 20);
 
         long vcount = g.getVertexCount();
-        long ecount = g.getEdgeList().size();
+        long ecount = g.getEdges().size();
         REQUIRE(vcount == 4);
         REQUIRE(ecount == 2);
 
-        for (auto edge : g.getEdgeList()) {
+        for (auto edge : g.getEdges()) {
             long newWeight = edge.weight + 5;
             g.addEdge(edge.a, edge.b, newWeight);
 
-            REQUIRE(g.getEdgeList().size() == ecount);
+            REQUIRE(g.getEdges().size() == ecount);
             REQUIRE(g.getVertexCount() == vcount);
         }
     }
@@ -55,7 +55,7 @@ TEST_CASE("Graph - Simple generation") {
 
             g.addEdge(A, B, W);
         }
-        long edges = g.getEdgeList().size();
+        long edges = g.getEdges().size();
         REQUIRE(edges <= 20);
     }
 
@@ -80,7 +80,7 @@ TEST_CASE("Graph - Advanced generation") {
             g = Graph::getRandomGraph(400, 100);
 
             REQUIRE(isConnected(g));
-            REQUIRE(g.getEdgeList().size() >= 5);
+            REQUIRE(g.getEdges().size() >= 5);
         }
     }
 
@@ -90,7 +90,7 @@ TEST_CASE("Graph - Advanced generation") {
             g = Graph::getRandomGraph(50, 20);
 
             REQUIRE(isConnected(g));
-            REQUIRE(g.getEdgeList().size() >= 5);
+            REQUIRE(g.getEdges().size() >= 5);
         }
     }
 }

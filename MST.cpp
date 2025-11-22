@@ -13,7 +13,8 @@
 Graph MST::kruskal(const Graph& g) {
     Graph mst;
 
-    std::vector<Graph::Edge> edges = g.getEdgeList();
+    const std::set<Graph::Edge>& edgeSet = g.getEdges();
+    std::vector<Graph::Edge> edges(edgeSet.begin(), edgeSet.end());
 
     //Sort edge list by weight
     std::sort(edges.begin(), edges.end(), [](const Graph::Edge& e1, const Graph::Edge& e2) {
@@ -37,7 +38,8 @@ Graph MST::prim(const Graph& g) {
         return mst;
     }
 
-    std::vector<Graph::Edge> edges = g.getEdgeList();
+    const std::set<Graph::Edge>& edgeSet = g.getEdges();
+    std::vector<Graph::Edge> edges(edgeSet.begin(), edgeSet.end());
 
     std::map<long, std::vector<std::pair<long, long>>> adjList;
     std::set<long> allVertices;

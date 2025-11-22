@@ -13,9 +13,9 @@ TEST_CASE("MSTTest - Kruskal") {
         mst = MST::kruskal(g);
 
         //For each edge, removing it should increase the number of components
-        for (auto removed : mst.getEdgeList()) {
+        for (auto removed : mst.getEdges()) {
             UnionFind uf;
-            for (auto valid : mst.getEdgeList()) {
+            for (auto valid : mst.getEdges()) {
                 uf.find(valid.a);
                 uf.find(valid.b);
                 if (removed == valid) {
@@ -36,9 +36,9 @@ TEST_CASE("MSTTest - Prim") {
         mst = MST::prim(g);
 
         //For each edge, removing it should increase the number of components
-        for (auto removed : mst.getEdgeList()) {
+        for (auto removed : mst.getEdges()) {
             UnionFind uf;
-            for (auto valid : mst.getEdgeList()) {
+            for (auto valid : mst.getEdges()) {
                 uf.find(valid.a);
                 uf.find(valid.b);
                 if (removed == valid) {

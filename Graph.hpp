@@ -2,7 +2,6 @@
 #define KRUSKALXPRIM_GRAPH_HPP
 #include <iosfwd>
 #include <set>
-#include <vector>
 
 class Graph {
 public:
@@ -17,13 +16,13 @@ public:
     };
 private:
     std::set<long> vertices;
-    std::vector<Edge> edgeList;
+    std::set<Edge> edgeList;
 public:
     Graph() = default;
 
     /**
-     * Generates a random connected graph (with minimum 5 edges).
-     * @param maxId the maximum vertex ID (vertex IDs will be in the range [0, maxId-1]).
+     * Generates a random connected graph.
+     * @param edges the number of edges in the graph.
      * @param maxWeight the maximum edge weight (edge weights will be in the range [0, maxWeight-1]).
      * @return Generated random graph.
      */
@@ -36,10 +35,18 @@ public:
     unsigned int getVertexCount() const;
 
     /**
-     * Returns the list of edges in the graph.
-     * @return List of edges.
+     * Returns the set of edges in the graph.
+     * @return Set of edges.
      */
-    std::vector<Edge>& getEdgeList() const;
+    const std::set<Edge>& getEdges() const;
+
+    /**
+     * Checks if an edge exists between two vertices.
+     * @param A One vertex of the edge.
+     * @param B The other vertex of the edge.
+     * @return True if the edge exists, false otherwise.
+     */
+    bool hasEdge(long A, long B) const;
 
     /**
      * Adds an edge to the graph.
