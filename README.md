@@ -1,4 +1,4 @@
-# Kruskalův vs. Jarníkův algoritmus {#custom-id}
+# Kruskalův vs. Jarníkův algoritmus
 
 Semestrální práce B6B36PCC - Martin Kindl @ ČVUT
 
@@ -19,7 +19,7 @@ Algoritmus pracuje s vrcholy:
 2. V každém kroku vybere hranu s nejmenší vahou, která spojuje vrchol již zahrnutý v kostře s vrcholem, který v kostře ještě není.
 3. Tento postup se opakuje, dokud nejsou připojeny všechny vrcholy.
 
-## Popis rešení
+## Popis implementace
 
 ### Implementované třídy/moduly
 - Třída **Graph** (`Graph.hpp`,`Graph.cpp`) - reprezentuje graf pomocí seznamu hran. Obsahuje metody pro přidávání hran a získání seznamu hran.
@@ -68,7 +68,7 @@ Očekávané pořadí argumentů je následující:
 
 Spuštění bez flagů vypočítá minimální kostru pomocí obou algoritmů pro graf zadaný v souboru `název_souboru`.
 
-| Flag               | Vyžaduje druhý argument   | Popis                                          |
+| Flag               | Druhý argument            | Popis                                          |
 |--------------------|---------------------------|------------------------------------------------|
 | `--help`           | Žádný                     | Zobrazí nápovědu k použití programu.           |
 | `-k`/`--kruskal`   | Vstupní soubor s grafem*  | Spustí pouze Kruskalův algoritmus.             |
@@ -79,7 +79,7 @@ Spuštění bez flagů vypočítá minimální kostru pomocí obou algoritmů pr
 
 \*Název vstupního souboru (např.: `./graph.txt` nebo `./data/myGraph`, apod.)
 
-### Vstupní soubor
+#### Vstupní soubor
 Požadovaný formát vstupního souboru je seznam hran (edge list) ve tvaru:"
 ```
 <u1> <v1> <váha1>
@@ -93,5 +93,40 @@ Požadovaný formát vstupního souboru je seznam hran (edge list) ve tvaru:"
   Get-Content .\graph.txt | Set-Content -Encoding utf8 graph-utf8.txt
 ```
 
-//TODO:
-### Testování
+## Testování
+V projektu jsou obsaženy jednotkové testy pro klíčové komponenty:
+- Testy pro třídu **Graph** (`tests/TestGraph.cpp`)
+  - Součástí jsou testy generátoru náhodných grafů.
+- Testy pro třídu **UnionFind** (`tests/TestUnionFind.cpp`)
+- Testy pro modul **MST** (`tests/TestMST.cpp`)
+
+## Srovnání algoritmů
+>Použité grafy jsou k nalezení v adresáři `/tests`.
+
+Srovnání provedeme na několika grafech o různé velikosti a hustotě hran.
+
+### 1. Kompletní grafy
+
+> Relativní odchylka měření, vypočtená ze vzorku 20 opakovaných běhů, činí 6,24 % u Kruskalova algoritmu a 4,64 % u Jarníkova algoritmu.
+
+| Graf                | Počet vrcholů | Počet hran  | Kruskalův čas | Jarníkův čas |
+|---------------------|---------------|-------------|---------------|--------------|
+| `complete-200.txt`  | 200           | 39 800      | ~3ms          | ~9ms         |
+| `complete-400.txt`  | 400           | 159 600     | ~28ms         | ~40ms        |
+| `complete-600.txt`  | 600           | 359 400     | ~100ms        | ~151ms       |
+| `complete-800.txt`  | 800           | 639 200     | ~200ms        | ~315ms       |
+| `complete-1000.txt` | 1000          | 999 000     | ~326ms        | ~462ms       |
+
+Výše uvedené měření si můžete ověřit pomocí příkazu ` ./kxp -s tests/complete-n.txt `, například:
+```shell
+  ./kxp -s tests/complete-800.txt
+```
+
+### 2. Velké grafy (hustota 0.9)
+
+| Počet hran | Počet vrcholů | Kruskalův čas | Jarníkův čas |
+|------------|---------------|---------------|--------------|
+| 100 000    | 551           | ~2ms          | ~7ms         |
+| 100 000    | 551           | ~2ms          | ~7ms         |
+| 100 000    | 551           | ~2ms          | ~7ms         |
+| 100 000    | 551           | ~2ms          | ~7ms         |
