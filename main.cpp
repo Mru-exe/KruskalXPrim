@@ -57,7 +57,8 @@ struct RunArgs {
     bool useFormatting = false;
     bool dontPrint = false;
     std::string filename;
-    int generatorAmplifier = 20;
+    int edgeCount = 20;
+    float density = 0.8;
 };
 
 /**
@@ -91,8 +92,16 @@ std::pair<RunOption, RunArgs> parseArguments(const int& argc, char* argv[]) {
 
     if (flagSet.contains("-g") || flagSet.contains("--generate")) {
         out.first = GENERATE;
-        int amp = std::atoi(argv[argc-1]);
-        out.second.generatorAmplifier = (amp > 0) ? amp : out.second.generatorAmplifier;
+        if (argv[argc-1][0] == '-' || argc[argv-2][0] == '-') {
+            out.first = FAIL;
+            return out;
+        }
+        int edges = std::atoi(argv[argc-2]);
+        out.second.edgeCount = (edges > 0) ? edges : out.second.edgeCount;
+
+        float density = std::atof(argv[argc-1]);
+        out.second.density = (density > 0.0 && density <= 1.0) ? density : out.second.density;
+
         return out;
     }
 
@@ -139,7 +148,7 @@ int main(int argc, char* argv[]) {
             return 0;
         }
         case(GENERATE): {
-            Graph random = Graph::getRandomGraph(args.second.generatorAmplifier, args.second.generatorAmplifier);
+            Graph random = Graph::getRandomGraph(args.second.edgeCount, args.second.edgeCount, args.second.density);
             random.print(std::cout, !args.second.useFormatting);
             return 0;
         }
