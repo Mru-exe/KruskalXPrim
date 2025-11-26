@@ -57,13 +57,13 @@ Algoritmus pracuje s vrcholy:
 
 Ovládání programů je možné pomocí argumentů v příkazové řádce.
 
-### CLI Argumenty
+### Spuštění výpočtů
 
 Očekávané pořadí argumentů je následující:
 1. Flag(y) nebo jejich kombinace (viz tabulka níže)
-2. Druhý (hlavní) argument - název souboru, případně počet hran pro generování grafu.
+2. Název souboru, případně počet hran pro generování grafu.
 ```shell
-  ./kxp [flag(y)] [druhý_argument]
+  ./kxp [flag(y)] [název souboru]
 ```
 
 Spuštění bez flagů vypočítá minimální kostru pomocí obou algoritmů pro graf zadaný v souboru `název_souboru`.
@@ -75,7 +75,6 @@ Spuštění bez flagů vypočítá minimální kostru pomocí obou algoritmů pr
 | `-p`/`--prim`      | Vstupní soubor s grafem*  | Spustí pouze Jarníkův (Primův) algoritmus.     |
 | `-s`/`--silent`    | Vstupní soubor s grafem*  | Vypíše pouze čas výpočtu (bez koster)          |
 | `-f`/`--formatted` | Vstupní soubor s grafem*  | Vypíše výsledné kostry v přehlednějším formátu |
-| `-g`/`--generate`  | Počet hran (výchozí = 20) | Vygeneruje náhodný souvislý graf               |
 
 \*Název vstupního souboru (např.: `./graph.txt` nebo `./data/myGraph`, apod.)
 
@@ -93,12 +92,26 @@ Požadovaný formát vstupního souboru je seznam hran (edge list) ve tvaru:"
   Get-Content .\graph.txt | Set-Content -Encoding utf8 graph-utf8.txt
 ```
 
+### Spuštění generátoru náhodných grafů
+Generátor je dostupný použitím flagu `--generate` nebo `-g`. Vyžaduje dva povinné argumenty:
+- Počet hran - kladné celé číslo.
+- Hustotu grafu - čílso mezi 0 a 1.
+
+```shell
+  ./kxp --generate [počet hran] [hustota grafu]
+```
+Při použití chybných hodnot argumentů program použije výchozí hodnoty (20 hran a hustota 0.5).
+
+Při jiné chybě program skončí s chybou `Invalid arguments`.
+
 ## Testování
 V projektu jsou obsaženy jednotkové testy pro klíčové komponenty:
 - Testy pro třídu **Graph** (`tests/TestGraph.cpp`)
   - Součástí jsou testy generátoru náhodných grafů.
 - Testy pro třídu **UnionFind** (`tests/TestUnionFind.cpp`)
 - Testy pro modul **MST** (`tests/TestMST.cpp`)
+
+> Některé jednotkové testy mohou být časově náročné - např. kontrola zda je kostra minimální má složitost O(n²).
 
 ## Srovnání algoritmů
 >Použité grafy jsou k nalezení v adresáři `/tests`.
@@ -122,11 +135,45 @@ Výše uvedené měření si můžete ověřit pomocí příkazu ` ./kxp -s test
   ./kxp -s tests/complete-800.txt
 ```
 
-### 2. Velké grafy (hustota 0.9)
+### 2. Velmi husté grafy (hustota ~0.9)
+
+> Použité grafy nejsou součástí repozitáře kvůli jejich velikosti. Lze je vygenerovat pomocí generátoru.
 
 | Počet hran | Počet vrcholů | Kruskalův čas | Jarníkův čas |
 |------------|---------------|---------------|--------------|
-| 100 000    | 551           | ~2ms          | ~7ms         |
-| 100 000    | 551           | ~2ms          | ~7ms         |
-| 100 000    | 551           | ~2ms          | ~7ms         |
-| 100 000    | 551           | ~2ms          | ~7ms         |
+| 100 000    | 472           | ~9ms          | ~7ms         |
+| 1 000 000  | 1 492         | ~89ms         | ~449ms       |
+| 10 000 000 | 4 715         | ~971ms        | ~4 578ms     |
+
+### 3. Husté grafy (hustota ~0.1)
+
+| Počet hran | Počet vrcholů | Kruskalův čas | Jarníkův čas |
+|------------|---------------|---------------|--------------|
+| 100 000    | 1 415         | ~15ms         | ~58ms        |
+| 1 000 000  | 4 473         | ~93ms         | ~599ms       |
+| 10 000 000 | 14 143        | ~919ms        | ~7 257ms     |
+
+### 4. Řídké grafy (hustota ~0.001)
+
+| Počet hran | Počet vrcholů | Kruskalův čas | Jarníkův čas |
+|------------|---------------|---------------|--------------|
+| 100 000    | 14 143        | ~27ms         | ~127ms       |
+| 1 000 000  | 44 722        | ~206ms        | ~1 581ms     |
+| 10 000 000 | 141 422       | ~3 604ms      | ~29 455ms    |
+
+## Zdroje
+
+**Kruskalův algoritmus:**
+- [GeeksForGeeks - Kruskal's Minimum Spanning Tree Algorithm](https://www.geeksforgeeks.org/dsa/kruskals-minimum-spanning-tree-algorithm-greedy-algo-2/)
+- [W3Schools - DSA - Kruskal's Algorithm](https://www.w3schools.com/dsa/dsa_algo_mst_kruskal.php)
+- [J. Tišer - Teorie grafů (Graph2019.pdf)](https://moodle.fel.cvut.cz/pluginfile.php/491011/course/section/77327/Graph2019.pdf?time=1733849371628)
+
+**Jarníkův algoritmus:**
+- [Wikipedia - Jarníkův algoritmus](https://cs.wikipedia.org/wiki/Jarn%C3%ADk%C5%AFv_algoritmus)
+- [GeeksForGeeks - Prim's MST](https://www.geeksforgeeks.org/prims-minimum-spanning-tree-mst-greedy-algo-5/)
+
+**Datová struktura Union-Find:**
+- [GeeksForGeeks - Introduction to disjoint set data structure](https://www.geeksforgeeks.org/dsa/introduction-to-disjoint-set-data-structure-or-union-find-algorithm/)
+
+**Další:**
+- [Rishabh Singh - Heap Data Structure and Priority Queue in C++](https://medium.com/@RobuRishabh/heap-data-structure-and-priority-queue-in-c-d2fe7a569c86)
