@@ -28,7 +28,7 @@ public:
      * @param maxWeight the maximum edge weight (edge weights will be in the range [0, maxWeight-1]).
      * @return Generated random graph.
      */
-    static Graph getRandomGraph(unsigned int edges, unsigned long maxWeight);
+    static Graph getRandomGraph(unsigned int edges, unsigned long maxWeight, double density = 0.5);
 
     /**
      * Returns the number of vertices in the graph.

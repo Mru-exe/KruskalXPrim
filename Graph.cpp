@@ -8,20 +8,16 @@ unsigned int Graph::getVertexCount() const {
     return this->vertices.size();
 }
 
-Graph Graph::getRandomGraph(unsigned int edges, unsigned long maxWeight) {
+Graph Graph::getRandomGraph(unsigned int edges, unsigned long maxWeight, double density) {
     Graph g;
     if (edges == 0) return g;
-
-    unsigned int minimumVertices = static_cast<unsigned int>(
-        std::ceil((1 + std::sqrt(1 + 8.0 * edges)) / 2.0)
-    );
-    unsigned int maximumVertices = edges + 1;
 
     std::random_device rd;
     std::mt19937 gen(rd());
 
-    std::uniform_int_distribution<unsigned int> viableVertexCountDist(minimumVertices, maximumVertices);
-    unsigned int vertices = viableVertexCountDist(gen);
+    unsigned int vertices = static_cast<unsigned int>(
+        (1.0 + std::sqrt(1.0 + (8.0 * edges) / density)) / 2.0
+    );
 
     std::uniform_int_distribution<long> weightDist(0, static_cast<long>(maxWeight - 1));
     std::uniform_int_distribution<unsigned int> viableDist(0, vertices);
@@ -42,6 +38,7 @@ Graph Graph::getRandomGraph(unsigned int edges, unsigned long maxWeight) {
             currentEdges = g.getEdges().size();
         }
     }
+    std::cout << "Vertices: " << g.getVertexCount() << ", Edges: " << g.getEdges().size() << std::endl;
 
     return g;
 }
