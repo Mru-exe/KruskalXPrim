@@ -4,8 +4,7 @@
 
 #ifndef KRUSKALXPRIM_UNIONFIND_HPP
 #define KRUSKALXPRIM_UNIONFIND_HPP
-#include <unordered_map>
-#include <vector>
+#include <map>
 
 /**
  * A Union-Find (Disjoint Set Union) data structure.
@@ -13,7 +12,7 @@
  */
 class UnionFind {
 private:
-    std::unordered_map<long, long> parent;
+    std::map<long, long> parent;
 public:
     UnionFind() = default;
 

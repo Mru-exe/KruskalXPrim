@@ -1,6 +1,6 @@
 #ifndef KRUSKALXPRIM_GRAPH_HPP
 #define KRUSKALXPRIM_GRAPH_HPP
-#include <iosfwd>
+#include <ostream>
 #include <set>
 
 class Graph {

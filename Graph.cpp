@@ -1,7 +1,7 @@
 #include "Graph.hpp"
 #include <ostream>
 #include <random>
-#include <algorithm> // for std::shuffle (windows fix)
+#include <algorithm>
 #include <iostream>
 
 unsigned int Graph::getVertexCount() const {
