@@ -87,7 +87,8 @@ Požadovaný formát vstupního souboru je seznam hran (edge list) ve tvaru:"
 <un> <vn> <váhan>
 ```
 
-**Upozornění:** Program **není** optimalizován pro prácí s kódováním `UTF-16`. Při práci na windows použijte konverzi do **UTF-8** nebo **ASCII**:
+> [!Warning]
+> Program **není** optimalizován pro prácí s kódováním `UTF-16`. Při práci na **Windows** použijte konverzi do UTF-8 nebo ASCII:
 ```shell
   Get-Content .\graph.txt | Set-Content -Encoding utf8 graph-utf8.txt
 ```
