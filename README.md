@@ -53,6 +53,13 @@ Algoritmus pracuje s vrcholy:
   - `kruskal(graph)` - implementace Kruskalova algoritmu pro nalezení minimální kostry grafu.
   - `prim(graph)` - implementace Primova algoritmu pro nalezení minimální kostry grafu.
 
+### Sestavení (build) programu
+V adresáři:
+```bash
+cmake . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
+```
+
 ## Ovládání programu
 
 Ovládání programů je možné pomocí argumentů v příkazové řádce.
@@ -117,7 +124,10 @@ V projektu jsou obsaženy jednotkové testy pro klíčové komponenty:
 
 ## Srovnání algoritmů
 > [!Tip]
->Použité grafy jsou k nalezení v adresáři `/tests/graphs`.
+> Použité grafy jsou k nalezení v adresáři `/tests/graphs`.
+
+> [!Note]
+> Program byl sestaven pomocí CMake v Release módu. A spuštěn na Intel Core Ultra 5 + 32GM RAM
 
 Srovnání provedeme na několika grafech o různé velikosti a hustotě hran.
 
