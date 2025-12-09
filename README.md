@@ -111,10 +111,12 @@ V projektu jsou obsaženy jednotkové testy pro klíčové komponenty:
 - Testy pro třídu **UnionFind** (`tests/TestUnionFind.cpp`)
 - Testy pro modul **MST** (`tests/TestMST.cpp`)
 
+> [!Note]
 > Některé jednotkové testy mohou být časově náročné - např. kontrola zda je kostra minimální má složitost O(n²).
 
 ## Srovnání algoritmů
->Použité grafy jsou k nalezení v adresáři `/tests`.
+> [!Tip]
+>Použité grafy jsou k nalezení v adresáři `/tests/graphs`.
 
 Srovnání provedeme na několika grafech o různé velikosti a hustotě hran.
 
@@ -137,7 +139,8 @@ Výše uvedené měření si můžete ověřit pomocí příkazu ` ./kxp -s test
 
 ### 2. Velmi husté grafy (hustota ~0.9)
 
-> Použité grafy nejsou součástí repozitáře kvůli jejich velikosti. Lze je vygenerovat pomocí generátoru.
+> [!Important]
+> **Použité grafy nejsou součástí repozitáře kvůli jejich velikosti. Lze je vygenerovat pomocí generátoru.**
 
 | Počet hran | Počet vrcholů | Kruskalův čas | Jarníkův čas |
 |------------|---------------|---------------|--------------|
